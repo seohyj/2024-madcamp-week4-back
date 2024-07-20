@@ -6,10 +6,10 @@ import { User } from './user.entity';
 export class UserController {
   constructor(private readonly UserService: UserService) {}
 
-  @Get()
+  /*@Get()
   findAll(): Promise<User[]> {
     return this.UserService.findAll();
-  }
+  }*/
 
   @Get(':id')
   findOne(@Param('id') id: number): Promise<User> {

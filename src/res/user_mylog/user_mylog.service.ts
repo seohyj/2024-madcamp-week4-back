@@ -29,4 +29,12 @@ export class UserMylogService {
   async remove(kakao_id: number, date: Date): Promise<void> {
     await this.userMylogRepository.delete({ kakao_id, date });
   }
+
+  async updateWakeTime(
+    kakao_id: number,
+    date: Date,
+    wake_time: Date
+  ): Promise<void> {
+    await this.userMylogRepository.update({kakao_id, date}, {wake_time});
+  }
 }

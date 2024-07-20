@@ -10,22 +10,26 @@ export class UserService {
     private UserRepository: Repository<User>,
   ) {}
 
-  findAll(): Promise<User[]> {
+  /*findAll(): Promise<User[]> {
     return this.UserRepository.find();
-  }
+  }*/
 
+  // view user
   findOne(id: number): Promise<User> {
     return this.UserRepository.findOne({ where: { kakao_id: id } });
   }
 
+  // create user
   create(user: User): Promise<User> {
     return this.UserRepository.save(user);
   }
 
+  // update user
   async update(id: number, user: Partial<User>): Promise<void> {
     await this.UserRepository.update(id, user);
   }
 
+  // remove user
   async remove(id: number): Promise<void> {
     await this.UserRepository.delete(id);
   }
