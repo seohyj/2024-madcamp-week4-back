@@ -1,21 +1,33 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "module": "commonjs",                    // CommonJS 모듈 시스템 사용
+    "declaration": true,                     // .d.ts 파일 생성
+    "removeComments": true,                  // 주석 제거
+    "emitDecoratorMetadata": true,           // 데코레이터 메타데이터 생성
+    "experimentalDecorators": true,          // 실험적인 데코레이터 기능 사용
+    "allowSyntheticDefaultImports": true,    // 기본값이 없는 모듈의 기본 가져오기를 허용
+    "target": "ES2021",                      // ECMAScript 2021로 타겟 설정
+    "sourceMap": true,                       // 소스맵 생성
+    "outDir": "./dist",                      // 출력 디렉터리 설정
+    "baseUrl": "./",                         // 기본 경로 설정
+    "incremental": true,                     // 증분 컴파일 사용
+    "skipLibCheck": true,                    // 라이브러리 타입 검사 생략
+    "strictNullChecks": false,               // null 및 undefined 검사 생략
+    "noImplicitAny": false,                  // any 타입의 암시적 사용 허용
+    "strictBindCallApply": false,            // 엄격한 bind, call, apply 검사 비활성화
+    "forceConsistentCasingInFileNames": false, // 파일 이름의 일관된 대소문자 사용 강제 비활성화
+    "noFallthroughCasesInSwitch": false,     // switch 문에서 fallthrough 비활성화
+    "moduleResolution": "node",              // Node.js 방식의 모듈 해석 사용
+    "esModuleInterop": true,                 // ES 모듈과 CommonJS 모듈 간의 호환성 활성화
+    "resolveJsonModule": true,               // JSON 모듈 가져오기 허용
+    "paths": {
+      "*": ["node_modules/*"]
+    },
+    "typeRoots": [
+      "node_modules/@types",
+      "src/@types"
+    ]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

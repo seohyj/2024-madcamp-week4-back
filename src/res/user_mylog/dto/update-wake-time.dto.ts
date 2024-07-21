@@ -1,3 +1,6 @@
+import { IsDate } from 'class-validator';
+
 export class UpdateWakeTimeDto {
-    wake_time: Date;
+  @IsDate()
+  wake_time: Date;
 }

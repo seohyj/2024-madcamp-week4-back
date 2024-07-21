@@ -1,12 +1,18 @@
 // connection with MySQL
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from '../src/res/user/user.module';
-import { UserMylogModule } from '../src/res/user_mylog/user_mylog.module';
-import { UserBrainModule } from '../src/res/user_brain/user_brain.module';
+import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './res/user/user.module';
+import { UserMylogModule } from './res/user_mylog/user_mylog.module';
+import { UserBrainModule } from './res/user_brain/user_brain.module';
+import { AppController } from './app.controller'; // for test
+import { AppService } from './app.service'; // for test
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -21,5 +27,7 @@ import { UserBrainModule } from '../src/res/user_brain/user_brain.module';
     UserMylogModule,
     UserBrainModule,
   ],
+  controllers: [AppController], // for test
+  providers: [AppService],
 })
 export class AppModule {}
