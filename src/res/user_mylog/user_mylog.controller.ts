@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { UserMylogService } from './user_mylog.service';
 import { UserMylog } from './user_mylog.entity';
 

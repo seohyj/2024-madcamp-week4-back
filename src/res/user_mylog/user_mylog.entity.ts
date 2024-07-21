@@ -8,13 +8,13 @@ export class UserMylog {
   @Column()
   kakao_id: number;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'date' })
   date: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', nullable: true })
   sleep_time: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', nullable: true })
   wake_time: Date;
 
   @Column()
@@ -23,21 +23,21 @@ export class UserMylog {
   @Column()
   context: string;
 
-  @Column()
+  @Column({ type: 'float', nullable: true })
   hex_happy: number;
 
-  @Column()
+  @Column({ type: 'float', nullable: true })
   hex_sad: number;
 
-  @Column()
+  @Column({ type: 'float', nullable: true })
   hex_anger: number;
 
-  @Column()
+  @Column({ type: 'float', nullable: true })
   hex_fear: number;
 
-  @Column()
+  @Column({ type: 'float', nullable: true })
   hex_surprise: number;
 
-  @Column()
+  @Column({ type: 'float', nullable: true })
   hex_disgust: number;
 }
