@@ -4,6 +4,7 @@ import { UserMylog } from './user_mylog.entity';
 
 import { CreateUserMylogDto } from './dto/create-user_mylog.dto'
 import { UpdateWakeTimeDto } from './dto/update-wake-time.dto';
+import { UpdateSleepTimeDto } from './dto/update-sleep-time.dto';
 
 @Controller('user-mylog')
 export class UserMylogController {
@@ -34,6 +35,21 @@ export class UserMylogController {
       kakao_id, 
       parsedDate,
       updateWakeTimeDto.wake_time
+    );
+  }
+
+  // sleep-time update
+  @Put(':kakao_id/:date/sleep-time')
+  async updateSleepTime(
+    @Param('kakao_id') kakao_id: number,
+    @Param('date') date: string,
+    @Body() updateSleepTimeDto: UpdateSleepTimeDto,
+  ): Promise<void> {
+    const parsedDate = new Date(date);
+    await this.userMylogService.updateSleepTime(
+      kakao_id, 
+      parsedDate,
+      updateSleepTimeDto.sleep_time
     );
   }
 }

@@ -31,5 +31,13 @@ export class UserMylogService {
     wake_time: Date
   ): Promise<void> {
     await this.userMylogRepository.update({ kakao_id, date }, { wake_time });
-  }  
+  } 
+  
+  async updateSleepTime(
+    kakao_id: number,
+    date: Date,
+    sleep_time: Date
+  ): Promise<void> {
+    await this.userMylogRepository.update({ kakao_id, date }, { sleep_time });
+  }
 }
