@@ -7,7 +7,7 @@ import { User } from './user.entity';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private UserRepository: Repository<User>,
+    private readonly userRepository: Repository<User>,
   ) {}
 
   /*findAll(): Promise<User[]> {
@@ -16,31 +16,31 @@ export class UserService {
 
   // view user
   findOne(id: number): Promise<User> {
-    return this.UserRepository.findOne({ where: { kakao_id: id } });
+    return this.userRepository.findOne({ where: { id } });
   }
 
   // find or create user
-  async findOrCreate(profile: Partial<User>): Promise<User> {
-    let user = await this.UserRepository.findOne({ where: { kakao_id: profile.kakao_id } });
+  async findOrCreate(userData: { kakao_id: number; nickname: string }): Promise<User> {
+    let user = await this.userRepository.findOne({ where: { kakao_id: userData.kakao_id } });
     if (!user) {
-      user = this.UserRepository.create(profile);
-      user = await this.UserRepository.save(user);
+      user = this.userRepository.create(userData);
+      await this.userRepository.save(user);
     }
     return user;
   }
 
   // create user
   create(user: User): Promise<User> {
-    return this.UserRepository.save(user);
+    return this.userRepository.save(user);
   }
 
   // update user
   async update(id: number, user: Partial<User>): Promise<void> {
-    await this.UserRepository.update(id, user);
+    await this.userRepository.update(id, user);
   }
 
   // remove user
   async remove(id: number): Promise<void> {
-    await this.UserRepository.delete(id);
+    await this.userRepository.delete(id);
   }
 }
