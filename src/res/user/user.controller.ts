@@ -1,6 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
+
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 @Controller('User')
 export class UserController {
@@ -30,4 +33,19 @@ export class UserController {
   remove(@Param('id') id: number): Promise<void> {
     return this.UserService.remove(id);
   }
+
+
+  @Get('kakao')
+  @UseGuards(AuthGuard('kakao'))
+  kakaoLogin() {
+    // 카카오 로그인 페이지로 리디렉션
+  }
+
+  @Get('kakao/callback')
+  @UseGuards(AuthGuard('kakao'))
+  kakaoLoginCallback(@Req() req: Request) {
+    // 카카오 로그인 성공 시 콜백
+    return req.user;
+  }
+  
 }
