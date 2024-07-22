@@ -1,4 +1,4 @@
-import { Controller, Put, Param, Post, Body, Logger } from '@nestjs/common';
+import { Controller, Put, Param, Get, Post, Body, Logger } from '@nestjs/common';
 import { UserMylogService } from './user_mylog.service';
 import { UserMylog } from './user_mylog.entity';
 
@@ -12,15 +12,38 @@ export class UserMylogController {
 
   constructor(private readonly userMylogService: UserMylogService) {}
 
-  // diary
+  // GET Diary
+  @Get(':kakao_id/:date')
+  async getDiary(
+    @Param('kakao_id') kakao_id: number,
+    @Param('date') date: string
+  ) {
+    const parsedDate = new Date(date);
+    return this.userMylogService.findDiaryByDate(kakao_id, parsedDate);
+  }
+
+  // POST Diary
   @Post()
-  async createUserMylog(
-    @Body() createUserMylogDto: CreateUserMylogDto
-  ): Promise<UserMylog> {
-    this.logger.log('Received createUserMylog request', createUserMylogDto);
-    const result = await this.userMylogService.createUserMylog(createUserMylogDto);
-    this.logger.log('Saved user mylog', result);
-    return result;
+  async createDiary(
+    @Body('kakao_id') kakao_id: number,
+    @Body('date') date: string,
+    @Body('title') title: string,
+    @Body('context') context: string
+  ) {
+    const parsedDate = new Date(date);
+    return this.userMylogService.saveOrUpdateDiary(kakao_id, parsedDate, title, context);
+  }
+
+  // PUT Diary
+  @Put(':kakao_id/:date')
+  async updateDiary(
+    @Param('kakao_id') kakao_id: number,
+    @Param('date') date: string,
+    @Body('title') title: string,
+    @Body('context') context: string
+  ) {
+    const parsedDate = new Date(date);
+    return this.userMylogService.saveOrUpdateDiary(kakao_id, parsedDate, title, context);
   }
 
   // wake-time update

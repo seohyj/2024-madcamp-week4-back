@@ -25,6 +25,21 @@ export class UserMylogService {
     return savedUserMylog;
   }
 
+  async findDiaryByDate(kakao_id: number, date: Date): Promise<UserMylog | undefined> {
+    return this.userMylogRepository.findOne({ where: { kakao_id, date } });
+  }
+
+  async saveOrUpdateDiary(kakao_id: number, date: Date, title: string, context: string): Promise<UserMylog> {
+    let diary = await this.findDiaryByDate(kakao_id, date);
+    if (diary) {
+      diary.title = title;
+      diary.context = context;
+    } else {
+      diary = this.userMylogRepository.create({ kakao_id, date, title, context });
+    }
+    return this.userMylogRepository.save(diary);
+  }
+
   async updateWakeTime(
     kakao_id: number,
     date: Date,
