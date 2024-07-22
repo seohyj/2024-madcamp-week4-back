@@ -3,11 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserMylog } from './user_mylog.entity';
 import { CreateUserMylogDto } from './dto/create-user_mylog.dto';
+import { UpdateWakeTimeDto } from './dto/update-wake-time.dto';
 
 @Injectable()
 export class UserMylogService {
   private readonly logger = new Logger(UserMylogService.name);
 
+  // diary, wake-time
   constructor(
     @InjectRepository(UserMylog)
     private userMylogRepository: Repository<UserMylog>,
@@ -22,4 +24,12 @@ export class UserMylogService {
     this.logger.log('Saved new UserMylog entry', savedUserMylog);
     return savedUserMylog;
   }
+
+  async updateWakeTime(
+    kakao_id: number,
+    date: Date,
+    wake_time: Date
+  ): Promise<void> {
+    await this.userMylogRepository.update({ kakao_id, date }, { wake_time });
+  }  
 }
