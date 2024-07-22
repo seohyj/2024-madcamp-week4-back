@@ -19,6 +19,16 @@ export class UserService {
     return this.UserRepository.findOne({ where: { kakao_id: id } });
   }
 
+  // find or create user
+  async findOrCreate(profile: Partial<User>): Promise<User> {
+    let user = await this.UserRepository.findOne({ where: { kakao_id: profile.kakao_id } });
+    if (!user) {
+      user = this.UserRepository.create(profile);
+      user = await this.UserRepository.save(user);
+    }
+    return user;
+  }
+
   // create user
   create(user: User): Promise<User> {
     return this.UserRepository.save(user);
