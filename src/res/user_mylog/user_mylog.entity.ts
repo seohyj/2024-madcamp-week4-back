@@ -17,10 +17,10 @@ export class UserMylog {
   @Column({ type: 'timestamp', nullable: true })
   wake_time: Date;
 
-  @Column()
+  @Column({ nullable: true })
   title: string;
 
-  @Column()
+  @Column({ nullable: true })
   context: string;
 
   @Column({ type: 'float', nullable: true })

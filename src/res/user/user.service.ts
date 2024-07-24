@@ -1,46 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(User) // User 엔티티를 주입
+    private userRepository: Repository<User>,
   ) {}
 
-  /*findAll(): Promise<User[]> {
-    return this.UserRepository.find();
-  }*/
-
-  // view user
   findOne(id: number): Promise<User> {
-    return this.userRepository.findOne({ where: { id } });
+    return this.userRepository.findOne({ where: { id } }); // ID로 유저 조회
   }
 
-  // find or create user
-  async findOrCreate(userData: { kakao_id: number; nickname: string }): Promise<User> {
-    let user = await this.userRepository.findOne({ where: { kakao_id: userData.kakao_id } });
-    if (!user) {
-      user = this.userRepository.create(userData);
-      await this.userRepository.save(user);
-    }
-    return user;
-  }
-
-  // create user
   create(user: User): Promise<User> {
-    return this.userRepository.save(user);
+    return this.userRepository.save(user); // 유저 생성 및 저장
   }
 
-  // update user
-  async update(id: number, user: Partial<User>): Promise<void> {
-    await this.userRepository.update(id, user);
+  update(id: number, user: Partial<User>): Promise<void> {
+    return this.userRepository.update(id, user).then(() => {}); // 유저 업데이트
   }
 
-  // remove user
-  async remove(id: number): Promise<void> {
-    await this.userRepository.delete(id);
+  remove(id: number): Promise<void> {
+    return this.userRepository.delete(id).then(() => {}); // 유저 삭제
+  }
+
+  findOrCreate(user: Partial<User>): Promise<User> {
+    return this.userRepository.findOne({ where: { kakao_id: user.kakao_id } }).then(existingUser => {
+      if (existingUser) {
+        return existingUser; // 유저가 이미 존재하면 해당 유저 반환
+      }
+      return this.userRepository.save(user); // 존재하지 않으면 유저 생성 및 저장
+    });
+  }
+
+  findOneByKakaoId(kakaoId: number): Promise<User> {
+    return this.userRepository.findOne({ where: { kakao_id: kakaoId } }); // 카카오 ID로 유저 조회
   }
 }

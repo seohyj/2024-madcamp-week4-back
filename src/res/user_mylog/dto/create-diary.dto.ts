@@ -1,6 +1,6 @@
 import { IsInt, IsString, IsDateString } from 'class-validator';
 
-export class CreateUserMylogDto {
+export class CreateDiaryDto {
     @IsInt()
     kakao_id: number;
 
