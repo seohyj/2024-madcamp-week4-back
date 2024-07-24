@@ -3,9 +3,6 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class UserMylog {
   @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
   kakao_id: number;
 
   @Column({ type: 'date' })

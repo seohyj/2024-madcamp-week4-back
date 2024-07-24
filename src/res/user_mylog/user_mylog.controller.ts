@@ -1,6 +1,7 @@
-import { Controller, Put, Param, Get, Post, Body, Logger } from '@nestjs/common';
+import { Controller, Put, Param, Get, Post, Body, Query, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { UserMylogService } from './user_mylog.service';
 import { UserMylog } from './user_mylog.entity';
+import { GeminiService } from '../../api/gemini';
 
 import { CreateUserMylogDto } from './dto/create-user_mylog.dto'
 import { UpdateWakeTimeDto } from './dto/update-wake-time.dto';
@@ -10,7 +11,10 @@ import { UpdateSleepTimeDto } from './dto/update-sleep-time.dto';
 export class UserMylogController {
   private readonly logger = new Logger(UserMylogController.name);
 
-  constructor(private readonly userMylogService: UserMylogService) {}
+  constructor(
+    private readonly userMylogService: UserMylogService,
+    private readonly geminiService: GeminiService,
+  ) {}
 
   // GET Diary
   @Get(':kakao_id/:date')
@@ -74,5 +78,25 @@ export class UserMylogController {
       parsedDate,
       updateSleepTimeDto.sleep_time
     );
+  }
+
+  // GET Quiz
+  @Get('quiz')
+  async getQuiz(@Query('kakaoId') kakaoId: number) {
+    const diaryEntries = await this.userMylogService.getDiaryEntries(kakaoId);
+
+    if (diaryEntries.length < 3) {
+      throw new HttpException(
+        '퀴즈를 생성할 충분한 일기 항목이 없습니다.',
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    const randomEntries = diaryEntries.sort(() => 0.5 -Math.random()).slice(0, 3);
+    const questions = await Promise.all(
+      randomEntries.map(entry => this.geminiService.generateQuestions([entry.context]))
+    );
+
+    return questions;
   }
 }

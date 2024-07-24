@@ -55,4 +55,11 @@ export class UserMylogService {
   ): Promise<void> {
     await this.userMylogRepository.update({ kakao_id, date }, { sleep_time });
   }
+
+  async getDiaryEntries(kakaoId: number): Promise<UserMylog[]> {
+    return this.userMylogRepository.find({
+      where: { kakao_id: kakaoId },
+      order: { date: 'DESC' },
+    });
+  }
 }
