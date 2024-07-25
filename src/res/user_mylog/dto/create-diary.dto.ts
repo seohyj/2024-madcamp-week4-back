@@ -1,8 +1,8 @@
 import { IsInt, IsString, IsDateString } from 'class-validator';
 
-export class CreateUserMylogDto {
+export class CreateDiaryDto {
     @IsInt()
-    kakao_id: number;
+    kakao_id: string;
 
     @IsDateString()
     date: string;
@@ -14,11 +14,3 @@ export class CreateUserMylogDto {
     context: string;
 }
 
-/* JSON
-{
-  "kakao_id": number,
-  "date": "YYYY-MM-DD",
-  "title": "일기 제목",
-  "context": "일기 본문"
-}
-*/

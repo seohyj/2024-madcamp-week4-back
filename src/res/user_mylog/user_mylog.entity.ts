@@ -4,9 +4,9 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 export class UserMylog {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  kakao_id: number;
+  
+  @Column({ type: 'bigint' })
+  kakao_id: string; // TypeORM에서는 bigint를 string으로 매핑
 
   @Column({ type: 'date' })
   date: Date;

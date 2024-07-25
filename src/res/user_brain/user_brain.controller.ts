@@ -12,7 +12,7 @@ export class UserBrainController {
   }
 
   @Get(':kakao_id/:date')
-  findOne(@Param('kakao_id') kakao_id: number, @Param('date') date: Date): Promise<UserBrain> {
+  findOne(@Param('kakao_id') kakao_id: string, @Param('date') date: Date): Promise<UserBrain> {
     return this.userBrainService.findOne(kakao_id, date);
   }
 
@@ -22,12 +22,12 @@ export class UserBrainController {
   }
 
   @Put(':kakao_id/:date')
-  update(@Param('kakao_id') kakao_id: number, @Param('date') date: Date, @Body() brain: Partial<UserBrain>): Promise<void> {
+  update(@Param('kakao_id') kakao_id: string, @Param('date') date: Date, @Body() brain: Partial<UserBrain>): Promise<void> {
     return this.userBrainService.update(kakao_id, date, brain);
   }
 
   @Delete(':kakao_id/:date')
-  remove(@Param('kakao_id') kakao_id: number, @Param('date') date: Date): Promise<void> {
+  remove(@Param('kakao_id') kakao_id: string, @Param('date') date: Date): Promise<void> {
     return this.userBrainService.remove(kakao_id, date);
   }
 }
