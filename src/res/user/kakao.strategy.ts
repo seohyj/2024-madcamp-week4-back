@@ -3,7 +3,6 @@ import { Strategy, Profile } from 'passport-kakao';
 import { Injectable,Logger } from '@nestjs/common';
 import { UserService } from './user.service';
 
-
 @Injectable()
 export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
   private readonly logger = new Logger(KakaoStrategy.name); // Initialize logger
@@ -17,7 +16,8 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
   async validate(accessToken: string, refreshToken: string, profile: Profile, done: Function): Promise<any> {
     this.logger.log(`Kakao profile: ${JSON.stringify(profile)}`); // 프로파일 로그
     const { id, username } = profile;
-    const kakaoId = Number(id); // must: id를 숫자로 변환
+    //const kakaoId = Number(id); // must: id를 숫자로 변환
+    const kakaoId = id.toString();
     const user = await this.userService.findOrCreate({ kakao_id: kakaoId, nickname: username });
     done(null, user);
   }

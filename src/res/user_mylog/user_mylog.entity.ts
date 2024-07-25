@@ -3,7 +3,10 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class UserMylog {
   @PrimaryGeneratedColumn()
-  kakao_id: number;
+  id: number;
+  
+  @Column({ type: 'bigint' })
+  kakao_id: string; // TypeORM에서는 bigint를 string으로 매핑
 
   @Column({ type: 'date' })
   date: Date;

@@ -5,7 +5,7 @@ import { User } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
-@Controller('User')
+@Controller('user')
 export class UserController {
   constructor(private readonly UserService: UserService) {}
 
@@ -15,7 +15,7 @@ export class UserController {
   }*/
 
   @Get(':id')
-  findOne(@Param('id') id: number): Promise<User> {
+  findOne(@Param('id') id: string): Promise<User> {
     return this.UserService.findOne(id);
   }
 
@@ -25,12 +25,12 @@ export class UserController {
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() user: Partial<User>): Promise<void> {
+  update(@Param('id') id: string, @Body() user: Partial<User>): Promise<void> {
     return this.UserService.update(id, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number): Promise<void> {
+  remove(@Param('id') id: string): Promise<void> {
     return this.UserService.remove(id);
   }
 

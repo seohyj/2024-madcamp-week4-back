@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, LessThan } from 'typeorm';  // LessThan 함수 임포트
 import { UserMylog } from './user_mylog.entity';
 import { CreateUserMylogDto } from './dto/create-user_mylog.dto';
 import { UpdateWakeTimeDto } from './dto/update-wake-time.dto';
@@ -25,11 +25,11 @@ export class UserMylogService {
     return savedUserMylog;
   }
 
-  async findDiaryByDate(kakao_id: number, date: Date): Promise<UserMylog | undefined> {
+  async findDiaryByDate(kakao_id: string, date: Date): Promise<UserMylog | undefined> {
     return this.userMylogRepository.findOne({ where: { kakao_id, date } });
   }
 
-  async saveOrUpdateDiary(kakao_id: number, date: Date, title: string, context: string): Promise<UserMylog> {
+  async saveOrUpdateDiary(kakao_id: string, date: Date, title: string, context: string): Promise<UserMylog> {
     let diary = await this.findDiaryByDate(kakao_id, date);
     if (diary) {
       diary.title = title;
@@ -41,7 +41,7 @@ export class UserMylogService {
   }
 
   async updateWakeTime(
-    kakao_id: number,
+    kakao_id: string,
     date: Date,
     wake_time: Date
   ): Promise<void> {
@@ -49,17 +49,19 @@ export class UserMylogService {
   } 
   
   async updateSleepTime(
-    kakao_id: number,
+    kakao_id: string,
     date: Date,
     sleep_time: Date
   ): Promise<void> {
     await this.userMylogRepository.update({ kakao_id, date }, { sleep_time });
   }
 
-  async getDiaryEntries(kakaoId: number): Promise<UserMylog[]> {
+  async getDiaryEntries(kakaoId: string, date: string): Promise<UserMylog[]> {
     return this.userMylogRepository.find({
-      where: { kakao_id: kakaoId },
-      order: { date: 'DESC' },
+      where: { 
+        kakao_id: kakaoId, 
+        date: LessThan(new Date(date)) // 현재 날짜 이전의 데이터를 조회
+      },
     });
   }
 }
