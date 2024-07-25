@@ -2,7 +2,7 @@ import { IsInt, IsString, IsDateString } from 'class-validator';
 
 export class CreateUserMylogDto {
     @IsInt()
-    kakao_id: number;
+    kakao_id: string;
 
     @IsDateString()
     date: string;

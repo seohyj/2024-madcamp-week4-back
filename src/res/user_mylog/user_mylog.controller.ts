@@ -19,7 +19,7 @@ export class UserMylogController {
   // GET Diary
   @Get(':kakao_id/:date')
   async getDiary(
-    @Param('kakao_id') kakao_id: number,
+    @Param('kakao_id') kakao_id: string,
     @Param('date') date: string
   ) {
     const parsedDate = new Date(date);
@@ -29,7 +29,7 @@ export class UserMylogController {
   // POST Diary
   @Post()
   async createDiary(
-    @Body('kakao_id') kakao_id: number,
+    @Body('kakao_id') kakao_id: string,
     @Body('date') date: string,
     @Body('title') title: string,
     @Body('context') context: string
@@ -41,7 +41,7 @@ export class UserMylogController {
   // PUT Diary
   @Put(':kakao_id/:date')
   async updateDiary(
-    @Param('kakao_id') kakao_id: number,
+    @Param('kakao_id') kakao_id: string,
     @Param('date') date: string,
     @Body('title') title: string,
     @Body('context') context: string
@@ -53,7 +53,7 @@ export class UserMylogController {
   // wake-time update
   @Put(':kakao_id/:date/wake-time')
   async updateWakeTime(
-    @Param('kakao_id') kakao_id: number,
+    @Param('kakao_id') kakao_id: string,
     @Param('date') date: string,
     @Body() updateWakeTimeDto: UpdateWakeTimeDto,
   ): Promise<void> {
@@ -68,7 +68,7 @@ export class UserMylogController {
   // sleep-time update
   @Put(':kakao_id/:date/sleep-time')
   async updateSleepTime(
-    @Param('kakao_id') kakao_id: number,
+    @Param('kakao_id') kakao_id: string,
     @Param('date') date: string,
     @Body() updateSleepTimeDto: UpdateSleepTimeDto,
   ): Promise<void> {
@@ -81,9 +81,10 @@ export class UserMylogController {
   }
 
   // GET Quiz
-  @Get('quiz')
-  async getQuiz(@Query('kakaoId') kakaoId: number) {
-    const diaryEntries = await this.userMylogService.getDiaryEntries(kakaoId);
+  @Get(':kakao_id/quiz')
+  async getQuiz(@Param('kakao_id') kakaoId: string) {
+    const today = new Date().toISOString().split('T')[0]; // 현재 날짜를 문자열로 변환
+    const diaryEntries = await this.userMylogService.getDiaryEntries(kakaoId, today);
 
     if (diaryEntries.length < 3) {
       throw new HttpException(
@@ -92,7 +93,7 @@ export class UserMylogController {
       );
     }
 
-    const randomEntries = diaryEntries.sort(() => 0.5 -Math.random()).slice(0, 3);
+    const randomEntries = diaryEntries.sort(() => 0.5 - Math.random()).slice(0, 3);
     const questions = await Promise.all(
       randomEntries.map(entry => this.geminiService.generateQuestions([entry.context]))
     );

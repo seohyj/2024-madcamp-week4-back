@@ -13,7 +13,11 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT', 3001); // 기본값으로 3001을 사용
 
-  app.enableCors();  // CORS 설정
+  // CORS 설정
+  app.enableCors({
+    origin: 'http://localhost:3000', // 허용할 도메인
+    credentials: true, // 자격 증명(쿠키 등)을 포함한 요청 허용
+  });  
 
   await app.listen(port);
   console.log(`Application is running on: ${await app.getUrl()}`);

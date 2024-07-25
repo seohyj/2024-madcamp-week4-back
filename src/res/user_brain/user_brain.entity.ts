@@ -1,11 +1,14 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class UserBrain {
-  @PrimaryColumn()
-  kakao_id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @PrimaryColumn()
+  @Column({ type: 'bigint' })
+  kakao_id: string; // TypeORM에서는 bigint를 string으로 매핑
+
+  @Column()
   date: Date;
 
   @Column()

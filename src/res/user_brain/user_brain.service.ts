@@ -14,7 +14,7 @@ export class UserBrainService {
     return this.userBrainRepository.find();
   }
 
-  findOne(kakao_id: number, date: Date): Promise<UserBrain> {
+  findOne(kakao_id: string, date: Date): Promise<UserBrain> {
     return this.userBrainRepository.findOne({ where: { kakao_id, date } });
   }
 
@@ -22,11 +22,11 @@ export class UserBrainService {
     return this.userBrainRepository.save(brain);
   }
 
-  async update(kakao_id: number, date: Date, brain: Partial<UserBrain>): Promise<void> {
+  async update(kakao_id: string, date: Date, brain: Partial<UserBrain>): Promise<void> {
     await this.userBrainRepository.update({ kakao_id, date }, brain);
   }
 
-  async remove(kakao_id: number, date: Date): Promise<void> {
+  async remove(kakao_id: string, date: Date): Promise<void> {
     await this.userBrainRepository.delete({ kakao_id, date });
   }
 }
