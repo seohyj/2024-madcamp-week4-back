@@ -145,7 +145,6 @@ export class UserMylogService {
 
     return updatedEmotions;
   }
-  
   // async updateEmotion(kakaoId: string, date: string, updateEmotionDto: UpdateEmotionDto): Promise<UserMylog> {
   //   this.logger.log('Updating emotion', { kakaoId, date, ...updateEmotionDto });
   //   const dateObj = this.convertToDate(date);

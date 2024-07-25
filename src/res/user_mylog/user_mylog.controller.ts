@@ -91,6 +91,17 @@ export class UserMylogController {
     return result;
   }
 
+  // @Post('emotion')
+  // async createEmotions(
+  //   @Body() updateEmotionDto: UpdateEmotionDto
+  // ): Promise<any> { // UserMylog 대신 필요한 필드만 반환하도록 타입 변경
+  //   this.logger.log('Received createEmotions request', updateEmotionDto);
+  //   const result = await this.userMylogService.createEmotions(updateEmotionDto);
+  //   this.logger.log('Saved emotions', result);
+  //   return result;
+  // }
+
+
   // 새로운 UpdateEmotion 메서드 추가
   @Put(':kakao_id/:date/emotion')
   async updateEmotions(
