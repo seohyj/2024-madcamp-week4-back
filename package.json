@@ -28,6 +28,7 @@
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.3.10",
     "@nestjs/typeorm": "^10.0.2",
+    "axios": "^1.7.2",
     "class-validator": "^0.14.1",
     "config": "^3.3.12",
     "dotenv": "^16.4.5",
