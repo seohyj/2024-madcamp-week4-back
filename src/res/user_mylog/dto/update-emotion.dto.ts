@@ -1,6 +1,12 @@
-import { IsNumber } from 'class-validator';
+import { IsISO8601, IsNumber, IsString } from 'class-validator';
 
 export class UpdateEmotionDto {
+  @IsString()
+  kakao_id: string;
+
+  @IsISO8601()
+  date: string;
+
   @IsNumber()
   hex_happy: number;
 

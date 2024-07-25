@@ -15,7 +15,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {} // UserService를 의존성 주입
 
   @Get(':id') // GET /user/:id 경로를 처리하는 핸들러
-  findOne(@Param('id') id: number): Promise<User> {
+  findOne(@Param('id') id: string): Promise<User> {
     return this.userService.findOne(id); // UserService를 사용하여 유저를 조회
   }
 
@@ -25,12 +25,12 @@ export class UserController {
   }
 
   @Put(':id') // PUT /user/:id 경로를 처리하는 핸들러
-  update(@Param('id') id: number, @Body() user: Partial<User>): Promise<void> {
+  update(@Param('id') id: string, @Body() user: Partial<User>): Promise<void> {
     return this.userService.update(id, user); // UserService를 사용하여 유저를 업데이트
   }
 
   @Delete(':id') // DELETE /user/:id 경로를 처리하는 핸들러
-  remove(@Param('id') id: number): Promise<void> {
+  remove(@Param('id') id: string): Promise<void> {
     return this.userService.remove(id); // UserService를 사용하여 유저를 삭제
   }
 
@@ -112,7 +112,7 @@ export class UserController {
 
   @Get('kakao/nickname') // GET /user/kakao/nickname 경로를 처리하는 핸들러
   async getNickname(@Req() req: Request, @Res() res: Response) {
-    const kakaoId = Number(req.query.kakao_id); // 요청에서 카카오 ID 추출 (number로 변환)
+    const kakaoId = String(req.query.kakao_id); // 요청에서 카카오 ID 추출 (number로 변환)
 
     try {
       const user = await this.userService.findOneByKakaoId(kakaoId); // 카카오 ID로 유저 조회

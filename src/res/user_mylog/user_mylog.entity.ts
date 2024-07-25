@@ -4,9 +4,9 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 export class UserMylog {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  kakao_id: number;
+  
+  @Column({ type: 'bigint' })
+  kakao_id: string; // TypeORM에서는 bigint를 string으로 매핑
 
   @Column({ type: 'date' })
   date: Date;
@@ -17,10 +17,10 @@ export class UserMylog {
   @Column({ type: 'timestamp', nullable: true })
   wake_time: Date;
 
-  @Column({ nullable: true })
+  @Column()
   title: string;
 
-  @Column({ nullable: true })
+  @Column()
   context: string;
 
   @Column({ type: 'float', nullable: true })

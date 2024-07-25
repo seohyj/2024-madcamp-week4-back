@@ -1,13 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('User')
+@Entity('user')
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number; // 자동 증가되는 primary key
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({ unique: true })
-  kakao_id: number; // 카카오에서 제공하는 고유 ID, 유니크하게 설정
+    @Column({ type: 'bigint' })
+    kakao_id: string; // TypeORM에서는 bigint를 string으로 매핑
 
-  @Column()
-  nickname: string; // 사용자 닉네임
+    @Column()
+    nickname: string;
 }

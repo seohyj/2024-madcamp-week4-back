@@ -15,7 +15,7 @@ export class UserMylogController {
 
   @Get(':kakao_id/:date')
   async getDiary(
-    @Param('kakao_id') kakaoId: number,
+    @Param('kakao_id') kakaoId: string,
     @Param('date') date: string,
   ): Promise<UserMylog> {
     this.logger.log(`Received getDiary request for kakao_id ${kakaoId} and date ${date}`);
@@ -36,7 +36,7 @@ export class UserMylogController {
 
   @Put(':kakao_id/:date')
   async updateDiary(
-    @Param('kakao_id') kakaoId: number,
+    @Param('kakao_id') kakaoId: string,
     @Param('date') date: string,
     @Body() updateDiaryDto: CreateDiaryDto
   ): Promise<UserMylog> {
@@ -48,7 +48,7 @@ export class UserMylogController {
 
   @Put(':kakao_id/:date/wake-time')
   async updateWakeTime(
-    @Param('kakao_id') kakaoId: number,
+    @Param('kakao_id') kakaoId: string,
     @Param('date') date: Date,
     @Body() updateWakeTimeDto: UpdateWakeTimeDto
   ): Promise<UserMylog> {
@@ -60,7 +60,7 @@ export class UserMylogController {
 
   @Put(':kakao_id/:date/sleep-time')
   async updateSleepTime(
-    @Param('kakao_id') kakaoId: number,
+    @Param('kakao_id') kakaoId: string,
     @Param('date') date: Date,
     @Body() updateSleepTimeDto: UpdateSleepTimeDto
   ): Promise<UserMylog> {
@@ -70,15 +70,36 @@ export class UserMylogController {
     return result;
   }
 
+  @Get(':kakao_id/:date/emotion')
+  async getEmotions(
+    @Param('kakao_id') kakaoId: string,
+    @Param('date') date: string
+  ): Promise<UserMylog> {
+    this.logger.log(`Received getEmotions request for kakao_id ${kakaoId} and date ${date}`);
+    const result = await this.userMylogService.getEmotions(kakaoId, date);
+    this.logger.log('Fetched emotions', result);
+    return result;
+  }
+
+  @Post('emotion')
+  async createEmotions(
+    @Body() updateEmotionDto: UpdateEmotionDto
+  ): Promise<UserMylog> {
+    this.logger.log('Received createEmotions request', updateEmotionDto);
+    const result = await this.userMylogService.createEmotions(updateEmotionDto);
+    this.logger.log('Saved emotions', result);
+    return result;
+  }
+
   // 새로운 UpdateEmotion 메서드 추가
   @Put(':kakao_id/:date/emotion')
-  async updateEmotion(
-    @Param('kakao_id') kakaoId: number,
+  async updateEmotions(
+    @Param('kakao_id') kakaoId: string,
     @Param('date') date: string,
     @Body() updateEmotionDto: UpdateEmotionDto
   ): Promise<UserMylog> {
-    this.logger.log(`Received updateEmotion request for kakao_id ${kakaoId} and date ${date}`, updateEmotionDto);
-    const result = await this.userMylogService.updateEmotion(kakaoId, date, updateEmotionDto);
+    this.logger.log(`Received updateEmotion(s) request for kakao_id ${kakaoId} and date ${date}`, updateEmotionDto);
+    const result = await this.userMylogService.updateEmotions(kakaoId, date, updateEmotionDto);
     this.logger.log('Updated emotion', result);
     return result;
   }

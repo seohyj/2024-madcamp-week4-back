@@ -23,7 +23,7 @@ export class UserMylogService {
     return date;
   }
 
-  async getDiary(kakaoId: number, date: string): Promise<UserMylog> {
+  async getDiary(kakaoId: string, date: string): Promise<UserMylog> {
     this.logger.log('Fetching diary entry', { kakaoId, date });
     const dateObj = this.convertToDate(date); // 문자열을 Date 객체로 변환
     this.logger.log('Converted date object:', JSON.stringify(dateObj));
@@ -40,7 +40,7 @@ export class UserMylogService {
     return savedDiary;
   }
 
-  async updateDiary(kakaoId: number, date: string, updateDiaryDto: CreateDiaryDto): Promise<UserMylog> {
+  async updateDiary(kakaoId: string, date: string, updateDiaryDto: CreateDiaryDto): Promise<UserMylog> {
     this.logger.log('Updating diary entry', { kakaoId, date, ...updateDiaryDto });
     const dateObj = this.convertToDate(date); // 문자열을 Date 객체로 변환
     const diary = await this.userMylogRepository.findOne({ where: { kakao_id: kakaoId, date: dateObj } });
@@ -58,7 +58,7 @@ export class UserMylogService {
   }
 
   async updateWakeTime(
-    kakaoId: number,
+    kakaoId: string,
     date: Date,
     updateWakeTimeDto: UpdateWakeTimeDto
   ): Promise<UserMylog> {
@@ -69,7 +69,7 @@ export class UserMylogService {
     }
   
     const wakeTime = new Date(updateWakeTimeDto.wake_time);
-    wakeTime.setHours(wakeTime.getHours() + 9); // Convert to KST
+    
   
     userMylog.wake_time = wakeTime;
     return this.userMylogRepository.save(userMylog);
@@ -77,7 +77,7 @@ export class UserMylogService {
   
   // Similar changes for updateSleepTime method
   async updateSleepTime(
-    kakaoId: number,
+    kakaoId: string,
     date: Date,
     updateSleepTimeDto: UpdateSleepTimeDto
   ): Promise<UserMylog> {
@@ -88,29 +88,80 @@ export class UserMylogService {
     }
   
     const sleepTime = new Date(updateSleepTimeDto.sleep_time);
-    sleepTime.setHours(sleepTime.getHours() + 9); // Convert to KST
+    
   
     userMylog.sleep_time = sleepTime;
     return this.userMylogRepository.save(userMylog);
   }
 
-  // 새로운 updateEmotion 메서드 추가
-  async updateEmotion(kakaoId: number, date: string, updateEmotionDto: UpdateEmotionDto): Promise<UserMylog> {
-    this.logger.log('Updating emotion', { kakaoId, date, ...updateEmotionDto });
-    const dateObj = this.convertToDate(date);
-    const userMylog = await this.userMylogRepository.findOne({ where: { kakao_id: kakaoId, date: dateObj } });
-    if (!userMylog) {
-      throw new Error('User log not found');
+  async getEmotions(kakaoId: string, date: string): Promise<UserMylog> {
+    this.logger.log('Fetching emotion entry', { kakaoId, date });
+    const dateObj = this.convertToDate(date); // 문자열을 Date 객체로 변환
+    this.logger.log('Converted date object:', JSON.stringify(dateObj));
+    const emotions = await this.userMylogRepository.findOne({ where: { kakao_id: kakaoId, date: dateObj } });
+    this.logger.log('Emotion entry fetched:', JSON.stringify(emotions));
+    return emotions;
+  }
+
+  async createEmotions(updateEmotionDto: UpdateEmotionDto): Promise<UserMylog> {
+    this.logger.log('Creating new emotion entry', updateEmotionDto);
+    const dateObj = this.convertToDate(updateEmotionDto.date); // 문자열을 Date 객체로 변환
+    const existingDiary = await this.userMylogRepository.findOne({ where: { kakao_id: updateEmotionDto.kakao_id, date: dateObj } });
+    
+    if (!existingDiary) {
+      throw new Error('Diary not found for the given kakao_id and date');
     }
 
-    userMylog.hex_happy = updateEmotionDto.hex_happy;
-    userMylog.hex_sad = updateEmotionDto.hex_sad;
-    userMylog.hex_anger = updateEmotionDto.hex_anger;
-    userMylog.hex_fear = updateEmotionDto.hex_fear;
-    userMylog.hex_surprise = updateEmotionDto.hex_surprise;
-    userMylog.hex_disgust = updateEmotionDto.hex_disgust;
+    existingDiary.hex_happy = updateEmotionDto.hex_happy;
+    existingDiary.hex_sad = updateEmotionDto.hex_sad;
+    existingDiary.hex_anger = updateEmotionDto.hex_anger;
+    existingDiary.hex_fear = updateEmotionDto.hex_fear;
+    existingDiary.hex_surprise = updateEmotionDto.hex_surprise;
+    existingDiary.hex_disgust = updateEmotionDto.hex_disgust;
 
-    return this.userMylogRepository.save(userMylog);
+    const savedEmotions = await this.userMylogRepository.save(existingDiary);
+    this.logger.log('Saved new emotion entry', JSON.stringify(savedEmotions));
+    return savedEmotions;
   }
+
+  // 새로운 updateEmotion 메서드 추가
+  async updateEmotions(kakaoId: string, date: string, updateEmotionDto: UpdateEmotionDto): Promise<UserMylog> {
+    this.logger.log('Updating emotion entry', { kakaoId, date, ...updateEmotionDto });
+    const dateObj = this.convertToDate(date); // 문자열을 Date 객체로 변환
+    const diary = await this.userMylogRepository.findOne({ where: { kakao_id: kakaoId, date: dateObj } });
+    if (!diary) {
+      throw new Error('Diary not found');
+    }
+
+    diary.hex_happy = updateEmotionDto.hex_happy;
+    diary.hex_sad = updateEmotionDto.hex_sad;
+    diary.hex_anger = updateEmotionDto.hex_anger;
+    diary.hex_fear = updateEmotionDto.hex_fear;
+    diary.hex_surprise = updateEmotionDto.hex_surprise;
+    diary.hex_disgust = updateEmotionDto.hex_disgust;
+
+    const updatedEmotions = await this.userMylogRepository.save(diary);
+    this.logger.log('Updated emotion entry', JSON.stringify(updatedEmotions));
+
+    return updatedEmotions;
+  }
+  
+  // async updateEmotion(kakaoId: string, date: string, updateEmotionDto: UpdateEmotionDto): Promise<UserMylog> {
+  //   this.logger.log('Updating emotion', { kakaoId, date, ...updateEmotionDto });
+  //   const dateObj = this.convertToDate(date);
+  //   const userMylog = await this.userMylogRepository.findOne({ where: { kakao_id: kakaoId, date: dateObj } });
+  //   if (!userMylog) {
+  //     throw new Error('User log not found');
+  //   }
+
+  //   userMylog.hex_happy = updateEmotionDto.hex_happy;
+  //   userMylog.hex_sad = updateEmotionDto.hex_sad;
+  //   userMylog.hex_anger = updateEmotionDto.hex_anger;
+  //   userMylog.hex_fear = updateEmotionDto.hex_fear;
+  //   userMylog.hex_surprise = updateEmotionDto.hex_surprise;
+  //   userMylog.hex_disgust = updateEmotionDto.hex_disgust;
+
+  //   return this.userMylogRepository.save(userMylog);
+  // }
 
 }
